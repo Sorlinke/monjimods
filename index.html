@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlockMods</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        @font-face {
+    font-family: 'MyFont';
+    src: url('/FuturaDisplay.woff2'); /* Sesuaikan path */
+        }
+
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #00BCD4;
+            --background-color: #1a1a1a;
+            --card-color: #2a2a2a;
+            --text-color: #ffffff;
+            --text-secondary: #cccccc;
+            --tag-blue: #2196F3;
+            --tag-red: #F44336;
+            --tag-green: #4CAF50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .header {
+            background-color: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .logo {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 10px 15px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .header .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            position: relative;
+            font-weight: 600;
+            font-size: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .header nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .header nav a:hover::after {
+            width: 100%;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .main-content .content {
+            width: 100%;
+        }
+
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px 0 0 25px;
+            font-size: 16px;
+            background-color: var(--card-color);
+            color: var(--text-color);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .search-bar select {
+            margin-left: -1px;
+            padding: 12px;
+            border: none;
+            border-radius: 0 25px 25px 0;
+            font-size: 16px;
+            background-color: var(--card-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-bar select:hover {
+            background-color: var(--primary-color);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: var(--card-color);
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .tabs a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tabs a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Card container styles */
+        #cardContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            color: var(--text-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Fixed image container */
+        .card .image-container {
+            margin: 0 0 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .card .author {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card .title {
+            font-size: 35px;
+            font-weight: normal;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-family: 'MyFont', sans-serif;
+            
+        }
+
+        .card .title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .card .title a:hover {
+            color: var(--secondary-color);
+        }
+
+        .card .description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Link buttons below description */
+        .link-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .link-button {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .link-button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .link-button.blue {
+            background-color: var(--tag-blue);
+        }
+
+        .link-button.purple {
+            background-color: rgb(128, 0, 200);
+        }
+
+        .link-button.red {
+            background-color: var(--tag-red);
+        }
+
+        .link-button.green {
+            background-color: var(--tag-green);
+        }
+
+        .card .tags {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .card .tags .tag {
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+        }
+
+
+        /* Footer */
+        .footer {
+            background-color: var(--card-color);
+            padding: 30px 0;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            margin-bottom: 20px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        #darkModeToggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-left: auto;
+        }
+
+        #darkModeToggle:hover {
+            transform: scale(1.1);
+        }
+
+        body.light-mode {
+            --background-color: #f0f0f0;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+        }
+
+        @media (max-width: 992px) {
+            #cardContainer {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header nav {
+                margin-top: 10px;
+            }
+
+            .header nav a {
+                margin: 5px 10px 5px 0;
+            }
+
+            #cardContainer {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">M</div>
+        <nav>
+            <a href="#">Monji Mod</a>
+        </nav>
+        <button id="darkModeToggle">🌓</button>
+    </div>
+    <div class="main-content">
+        <div class="content">
+            <div class="search-bar">
+                <input id="searchInput" placeholder="To search, type and hit enter" type="text"/>
+                <select>
+                    <option>Latest</option>
+                    <option>Popular</option>
+                    <option>Featured</option>
+                </select>
+            </div>
+            <div class="tabs">
+                <a class="active" data-filter="all">All</a>
+                <a data-filter="Marketplace">Marketplace</a>
+                <a data-filter="Free">Free</a>
+                <a data-filter="MCPE">MCPE Patch</a>
+            </div>
+            <div id="cardContainer">
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By DimzCraft
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/umXtdcOn4Jk/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Available Inventory Viewer</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/available-inventory-viewer/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By megavgameryt
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/Ih8qdNyWZH4/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Black Myth Wukong</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://youtu.be/_8fCn_yHj4o?si=GcBF0vdkAUMDKA96" class="link-button red">Download (Youtube)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Theorist
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/07/Brewing-Guide-UI-Pack-MCPE-Thumbnail.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Brewing Guide UI</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/brewing-guide-ui/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://modbay.org/textures/3892-brewing-recipes-ui.html" class="link-button purple">Download (Modbay)</a>
+                        <a href="https://www.9minecraft.net/brewing-guide-ui-pack-mcpe/#goog_rewarded" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By krzzxz
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/10/Better-Visual-Coordinates-Texture-Pack-MCPE-Thumbnail.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Better Visual Coordinates</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/better-visual-coordinates/" class="link-button blue">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/better-visual-coordinates-texture-pack-mcpe/" class="link-button red">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By 5 Frame Studios
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/DheYf9SOqO8/mqdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Armor Add-on</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/4Dgd" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/7h8SVIl" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=a70d9fc9-1ebb-42ae-97f0-5b1b1cfd680c" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Unlinked
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/fnSqKn0p7QE/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Essentials</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/CqnyCbtZ" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/fKSV71U" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=2e1f786f-7f12-4573-91b4-4e356302737b" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Rexoes<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/FbekcPcUu9I/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Elemental Magma Axe</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://youtu.be/FbekcPcUu9I?si=9Y9Kr8Q8qaXDDIfu" class="link-button red">Download (Youtube)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Rexoes<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/wUEIbWYDb9o/hqdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>RPG Elemental Weapon</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://youtu.be/wUEIbWYDb9o?si=5_yJdpi43SDLXwbV" class="link-button red">Download (Youtube)</a>
+                        <a href="https://youtube.com/@rexoes12?si=Kn0Nr0sX6Ah3gTxP" class="link-button red">Download (Youtube2)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By sparkskye
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/QgoLh6nFQRE/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Stellar Graphics V2</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/stellar-graphics/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/stellar-graphics-pack-mcpe/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By B00g13_eat_grass
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/FkA0PSIEmFY/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Stellar Graphics Reimagined</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://modbay.org/textures/1604-stella-graphics-reimagined.html" class="link-button purple">Download (Modbay)</a>
+                        <a href="https://mcpedl.com/stellar-graphics-reimagined/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.planetminecraft.com/texture-pack/stellar-graphics-reimagined-support-renderdragon-engine/" class="link-button green">Download (PlanetMinecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By CountXD
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2023/06/My-Minimal-Armor-Screenshots-1.png"/>
+                    </div>
+                    <div class="title">
+                        <div> My Minimal Armor </div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://www.planetminecraft.com/texture-pack/minimal-armor-bedrock/" class="link-button green">Download (With Ads)</a>
+                        <a href="https://www.9minecraft.net/my-minimal-armor-resource-pack/" class="link-button green">Download (Subscription)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Honeyfrost
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/Q1VMzRYIgmM/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div> Mowzie's Mob </div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/VrUIS" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/o38yimj" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=9afc43e7-dc2c-44c0-a3b8-7107fa9da196" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Pixel Studio
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/gpUI2fweisc/hqdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div> Train Your Dragon </div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/2hKLqHbo" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/gSoORjci" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/error/404" class="link-button green">Delete (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Spark Universe/Unknown
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/12/Insane-Disaster-Addon-MCPE-Thumbnail.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div> Insane Disaster </div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://www.9minecraft.net/insane-disaster-addon-mcpe/#google_vignette" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Lostduckies
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/ud5GTko_llw/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div> Elemental Bending </div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/OszcCuJ" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/x2mDl01M" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=411524c7-70d8-4174-a941-efa3e90d2808" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By notnicto
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/H2XJT62RAvI/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div> Ultramarine Overhaul </div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/ultramarine/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By ArcAce<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/Liad6pjQihM/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>FlyerWorks</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/flyerworks-add-on-vanilla-friendly-flying-vehicle-addon/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://monster-mcpe.com/mods/3674-flyerworks-add-on-121120.html" class="link-button green">Download (MonsterMCPE)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Amon28<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2023/10/Simple-Waystone-Addon-MCPE-Thumbnail.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Simple Waystone</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/simple-waystone-addon/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/simple-waystone-addon-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Puchalepley1/strawberry studies
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/05/Paper-Doll-Texture-Pack-MCPE-Thumbnail.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Paper Doll</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/paper-doll-mcpe-2/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/paper-doll-texture-pack-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Angeldfire2
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/09/Sophisticangel-Backpack-Addon-MCPE-Thumbnail.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Sophisticangel Backpack</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/sophisticangel-backpack/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/sophisticangel-backpack-addon-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Sirob
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2022/09/Pick-Up-Carry-Addon-MCPE-Thumbnail.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Pick Up & Carry</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/pick-up-carry-addon/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/pick-up-carry-addon-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Ltech
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/06/Ore-Borders-Texture-Pack-MCPE-Thumbnail.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Highlight Ores Pack</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://www.9minecraft.net/ore-borders-texture-pack-mcpe/#goog_rewarded" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By real_tlgm
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/ao7QsSwizRs/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>The Ty-els Setting Overlay UI Pack</div>
+                    </div>
+                    <div class="description">Texture</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/the-ty-els-settings-overlay-ui-pack/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/the-ty-els-settings-overlay-ui-pack/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+                
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By  Cubed Creation
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/hb5BpGry_CE/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Realism Effect</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/iIR9zb" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/ME06p" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=c34660dc-7c8d-4ebe-9069-bc38b9066a6a" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div> 
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By  Unknown
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/blvJXd9M1Ek/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Biomes+ Realism</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://sfl.gl/5bug0RBE" class="link-button blue">Download (With Ads)</a>
+                        <a href="https://sub4unlock.co/02YFTW" class="link-button red">Download (Subscription)</a>
+                        <a href="" class="link-button green">Delete (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By  HonKit26113
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2023/01/Thumbnail-Item-Info-Texture-Pack-MCPE.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Item Info+</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/hunger-points-on-food-names/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/item-info-plus-texture-pack-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By AnotherSeaWhite
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://static.planetminecraft.com/files/image/minecraft/mod/2024/424/18192009_l.webp"/>
+                    </div>
+                    <div class="title">
+                        <div>Sweep & Slash</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/sweep-n-slash/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.planetminecraft.com/mod/bedrock-sweep-n-slash-java-combat-in-bedrock/" class="link-button green">Download (PlanetMinecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By ShrimpSnail
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2024/09/Shrimps-Immersive-Interfaces-Resource-Pack.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Immersive Interface</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://www.9minecraft.net/shrimps-immersive-interfaces-resource-pack/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Fused Bolt
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/Gv0JWn8TZr8/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Better Foliage</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://modbay.org/mods/1094-better-foliage.html#download-links-section" class="link-button purple">Download (Modbay)</a>
+                        <a href="https://mcpedl.com/better-foliage-bedrock-edition/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Blockify
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://www.9minecraft.net/wp-content/uploads/2025/02/GUI-Revision-Texture-Pack-MCPE-Thumbnail.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>GUI Revision</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://modbay.org/textures/3747-gui-revision.html" class="link-button purple">Download (Modbay)</a>
+                        <a href="https://mcpedl.com/gui-revision/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Lord Raiyon
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Image" src="https://img.youtube.com/vi/kj8SCQuZQn0/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Raiyon Dynamic Light</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://modbay.org/mods/463-raiyons-dynamic-light.html" class="link-button purple">Download (Modbay)</a>
+                        <a href="https://mcpedl.com/raiyons-dynamic-light-addon/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Haimcyfly
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="RImage" src="https://www.9minecraft.net/wp-content/uploads/2020/10/Stay-True-Resource-Pack.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Stay True</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/stay-true-haimcyfly/" class="link-button green">Download (MCPEDL)</a>
+                        <a href="https://www.9minecraft.net/stay-true-resource-pack/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Shadow Vietnam
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="RImage" src="https://img.youtube.com/vi/hBWjqozzGtg/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Shadow Company</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://www.9minecraft.net/shadow-company-addon-mcpe/" class="link-button green">Download (9Minecraft)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Sanidhya-Not
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://img.youtube.com/vi/VlbukhwM0Nk/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Eggs Overhaul</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://modbay.org/textures/4053-eggs-overhaul.html" class="link-button purple">Download (Modbay)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By Blockify
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://img.youtube.com/vi/8GeAODmqE7o/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Player Health Indicator</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/player-health-indicator-2/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By sw is bruh
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://img.youtube.com/vi/6u9n4ILsbOM/maxresdefault.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Better Hands V3.2</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/better-hands-1-20-62/" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Free">
+                    <div class="author">
+                        By CakeofCraft
+                        <br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://www.9minecraft.net/wp-content/uploads/2025/02/Cakes-Cosmetic-Pack-MCPE-Thumbnail.png"/>
+                    </div>
+                    <div class="title">
+                        <div>Cake’s Cosmetic Pack</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://www.9minecraft.net/cakes-cosmetic-pack-mcpe/" class="link-button green">Download (9minecraft)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=61c7a786-d7ad-49e0-a710-817121cd9795" class="link-button green">Download (MCPEDL)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Free</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Spark Universe<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/ce291df2-0d25-440c-b368-65732c2a654f/A_Minecraft_Movie_Add-on_Pack_Thumbnail_0.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>A Minecraft Movie (Free)</div>
+                    </div>
+                    <div class="description">Add-on</div>
+                    <div class="link-buttons">
+                        <a href="https://mcpedl.com/cake-s-backpacks/" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+                <div class="card" data-tag="Marketplace">
+                    <div class="author">
+                        By Oreville Studios<br/>
+                        Published on 2025
+                    </div>
+                    <div class="image-container">
+                        <img alt="Resulymz Image" src="https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/d40d9ccd-d2c2-44ac-b492-fe60a4ce3193/actionsandstuff_Thumbnail_0.jpg"/>
+                    </div>
+                    <div class="title">
+                        <div>Action & Stuff 1.2</div>
+                    </div>
+                    <div class="description">Texture Pack</div>
+                    <div class="link-buttons">
+                        <a href="#" class="link-button blue">Download (With Ads)</a>
+                        <a href="#" class="link-button red">Download (Subscription)</a>
+                        <a href="https://www.minecraft.net/en-us/marketplace/pdp?id=61c7a786-d7ad-49e0-a710-817121cd9795" class="link-button green">Download (Marketplace)</a>
+                    </div>
+                    <div class="tags">
+                        <div class="tag">Marketplace</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About BlockMods</h3>
+                <p>BlockMods is your one-stop destination for Minecraft add-ons, mods, and world packs. We curate the best content for both Marketplace and Free downloads.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="https://wa.me/your-whatsapp-number" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://youtube.com/your-channel" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BlockMods. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        function searchCards() {
+            var input, filter, cards, i, txtValue;
+            input = document.getElementById('searchInput');
+            filter = input.value.toLowerCase();
+            cards = document.querySelectorAll('.card');
+            
+            for (i = 0; i < cards.length; i++) {
+                txtValue = cards[i].querySelector('.title').textContent || cards[i].querySelector('.title').innerText;
+                
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', searchCards);
+
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            this.textContent = document.body.classList.contains('light-mode') ? '🌙' : '🌓';
+        });
+
+        // Tab filtering functionality
+        document.querySelectorAll('.tabs a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active tab
+                document.querySelector('.tabs a.active').classList.remove('active');
+                this.classList.add('active');
+                
+                // Get filter value
+                const filter = this.getAttribute('data-filter');
+                
+                // Filter cards
+                filterCards(filter);
+            });
+        });
+
+        // Function to filter cards based on tag
+        function filterCards(filter) {
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                // Reset search input when changing tabs
+                document.getElementById('searchInput').value = '';
+                
+                if (filter === 'all') {
+                    // Show all cards
+                    card.style.display = '';
+                    
+                    // Reset animation for a nice effect
+                    card.style.animation = 'none';
+                    card.offsetHeight; // Trigger reflow
+                    card.style.animation = null;
+                } else {
+                    // Show only cards with matching tag
+                    const cardTag = card.getAttribute('data-tag');
+                    
+                    if (cardTag === filter) {
+                        card.style.display = '';
+                        
+                        // Reset animation for a nice effect
+                        card.style.animation = 'none';
+                        card.offsetHeight; // Trigger reflow
+                        card.style.animation = null;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
